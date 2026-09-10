@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Layout</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial;
+        }
+
+        /* Header */
+        .header {
+            height: 120px;
+            background-color: orange;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin-bottom: 25px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Left and Right */
+        .leftright {
+            display: flex;
+            height: 100px;
+        }
+
+        .left {
+            width: 50%;
+            background-color: pink;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+        }
+
+        .right {
+            width: 50%;
+            background-color: lightgray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+        }
+
+        /* Colors */
+        .colors {
+            display: flex;
+            height: 80px;
+        }
+
+        .color {
+            width: 25%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .blue {
+            background-color: skyblue;
+        }
+
+        .red {
+            background-color: red;
+            color: white;
+        }
+
+        .green {
+            background-color: lightgreen;
+        }
+
+        .yellow {
+            background-color: yellow;
+        }
+
+        /* Number boxes */
+        .numbers {
+            display: flex;
+            height: 120px;
+        }
+
+        .number {
+            flex: 1;
+            border: 2px solid white;
+            background-color: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+        }
+
+        /* Footer */
+        .footer {
+            height: 100px;
+            background-color: blue;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <h1>Header</h1>
+
+        <div class="menu">
+            <div>Home</div>
+            <div>About</div>
+            <div>Login</div>
+        </div>
+    </div>
+
+    <!-- Left and Right -->
+    <div class="leftright">
+        <div class="left">Left</div>
+        <div class="right">Right</div>
+    </div>
+
+    <!-- Four Colors -->
+    <div class="colors">
+        <div class="color blue">Blue</div>
+        <div class="color red">Red</div>
+        <div class="color green">Green</div>
+        <div class="color yellow">Yellow</div>
+    </div>
+
+    <!-- Five Boxes -->
+    <div class="numbers">
+        <div class="number">1</div>
+        <div class="number">2</div>
+        <div class="number">3</div>
+        <div class="number">4</div>
+        <div class="number">5</div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        Footer
+    </div>
+
+</body>
+</html>
