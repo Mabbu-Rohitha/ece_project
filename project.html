@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FoodShare - Smart Food Waste Management</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+:root{
+    --green:#198754;
+    --darkgreen:#146c43;
+    --light:#f4f8f5;
+    --white:#fff;
+    --yellow:#ffc107;
+    --red:#dc3545;
+    --blue:#0d6efd;
+    --text:#333;
+}
+
+body{
+    background:var(--light);
+    color:var(--text);
+    transition:.3s;
+}
+
+/* DARK MODE */
+
+body.dark{
+    --light:#121212;
+    --white:#1f1f1f;
+    --text:#eee;
+}
+
+body.dark .food-card,
+body.dark .stat-card,
+body.dark .form-container,
+body.dark .impact-card,
+body.dark table{
+    background:#1f1f1f;
+    color:#eee;
+}
+
+/* NAVBAR */
+
+.navbar{
+    background:var(--green);
+    color:white;
+    padding:15px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:bold;
+}
+
+.nav-links{
+    display:flex;
+    gap:18px;
+    list-style:none;
+    align-items:center;
+}
+
+.nav-links a{
+    color:white;
+    text-decoration:none;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.nav-links a:hover{
+    color:#d1ffd9;
+}
+
+.theme-btn{
+    border:none;
+    background:white;
+    padding:7px 12px;
+    border-radius:20px;
+    cursor:pointer;
+}
+
+/* SECTIONS */
+
+.section{
+    display:none;
+    padding:40px 7%;
+    min-height:85vh;
+}
+
+.active{
+    display:block;
+}
+
+/* HERO */
+
+.hero{
+    min-height:85vh;
+    background:
+    linear-gradient(rgba(25,135,84,.85),rgba(25,135,84,.85)),
+    url("https://images.unsplash.com/photo-1498837167922-ddd27525d352")
+    center/cover;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+}
+
+.hero-content{
+    max-width:800px;
+}
+
+.hero h1{
+    font-size:48px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:19px;
+    line-height:1.7;
+    margin-bottom:30px;
+}
+
+.btn{
+    background:var(--yellow);
+    color:#222;
+    border:none;
+    padding:13px 25px;
+    border-radius:7px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.btn:hover{
+    transform:scale(1.03);
+}
+
+/* STATS */
+
+.dashboard-title{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.stat-card{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 3px 12px rgba(0,0,0,.1);
+}
+
+.stat-card h2{
+    color:var(--green);
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+/* IMPACT */
+
+.impact-section{
+    margin-top:35px;
+}
+
+.impact-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.impact-card{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.impact-card .icon{
+    font-size:40px;
+}
+
+.impact-card h2{
+    color:var(--green);
+    margin:10px;
+}
+
+/* FORM */
+
+.form-container{
+    max-width:650px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 3px 15px rgba(0,0,0,.1);
+}
+
+.form-container h2{
+    text-align:center;
+    color:var(--green);
+    margin-bottom:25px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    width:100%;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+textarea{
+    min-height:80px;
+}
+
+/* SEARCH */
+
+.search-box{
+    max-width:700px;
+    margin:0 auto 25px;
+    display:flex;
+    gap:10px;
+}
+
+.search-box input,
+.search-box select{
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.search-box input{
+    flex:1;
+}
+
+/* FOOD CARDS */
+
+.food-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.food-card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    box-shadow:0 3px 12px rgba(0,0,0,.1);
+    transition:.2s;
+}
+
+.food-card:hover{
+    transform:translateY(-5px);
+}
+
+.food-card h3{
+    color:var(--green);
+    margin-bottom:12px;
+}
+
+.food-card p{
+    margin:8px 0;
+}
+
+.available{
+    color:var(--green);
+    font-weight:bold;
+}
+
+.claimed{
+    color:var(--blue);
+    font-weight:bold;
+}
+
+.expired{
+    color:var(--red);
+    font-weight:bold;
+}
+
+.card-btn{
+    margin-top:15px;
+    background:var(--green);
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.card-btn:hover{
+    background:var(--darkgreen);
+}
+
+/* TABLE */
+
+.history-table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+.history-table th,
+.history-table td{
+    padding:13px;
+    border:1px solid #ddd;
+    text-align:left;
+}
+
+.history-table th{
+    background:var(--green);
+    color:white;
+}
+
+/* ALERT */
+
+.alert{
+    background:#fff3cd;
+    border:1px solid #ffecb5;
+    color:#664d03;
+    padding:15px;
+    border-radius:7px;
+    margin-bottom:20px;
+}
+
+/* REWARD */
+
+.reward-box{
+    margin-top:30px;
+    background:linear-gradient(135deg,#198754,#20c997);
+    color:white;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.reward-box h1{
+    font-size:40px;
+}
+
+.progress{
+    height:15px;
+    background:#ffffff55;
+    border-radius:20px;
+    margin:20px 0;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    background:white;
+    width:0%;
+    transition:1s;
+}
+
+/* FOOTER */
+
+footer{
+    background:var(--darkgreen);
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+    .navbar{
+        flex-direction:column;
+        gap:15px;
+    }
+
+    .nav-links{
+        flex-wrap:wrap;
+        justify-content:center;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .impact-grid{
+        grid-template-columns:1fr;
+    }
+
+    .hero h1{
+        font-size:34px;
+    }
+}
+
+@media(max-width:500px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .search-box{
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<nav class="navbar">
+
+    <div class="logo">
+        🍱 FoodShare
+    </div>
+
+    <ul class="nav-links">
+
+        <li>
+            <a onclick="showSection('home')">Home</a>
+        </li>
+
+        <li>
+            <a onclick="showSection('dashboard')">Dashboard</a>
+        </li>
+
+        <li>
+            <a onclick="showSection('donate')">Donate</a>
+        </li>
+
+        <li>
+            <a onclick="showSection('available')">Available Food</a>
+        </li>
+
+        <li>
+            <a onclick="showSection('history')">History</a>
+        </li>
+
+        <li>
+            <button class="theme-btn" onclick="toggleDarkMode()">
+                🌙
+            </button>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- HOME -->
+
+<section id="home" class="section active" style="padding:0">
+
+    <div class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                🍱 Smart Food Waste Management
+            </h1>
+
+            <p>
+                Connect surplus food with people and organizations
+                who need it. Reduce food waste, help communities
+                and protect our environment.
+            </p>
+
+            <button class="btn"
+                    onclick="showSection('donate')">
+
+                Donate Food
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="section">
+
+    <h1 class="dashboard-title">
+        📊 Smart Dashboard
+    </h1>
+
+    <div id="expiryAlert"></div>
+
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <h2 id="totalDonations">0</h2>
+
+            <p>Total Donations</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h2 id="availableFood">0</h2>
+
+            <p>Available Food</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h2 id="claimedFood">0</h2>
+
+            <p>Food Claimed</p>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h2 id="totalQuantity">0</h2>
+
+            <p>Total Meals</p>
+
+        </div>
+
+    </div>
+
+
+    <!-- IMPACT -->
+
+    <div class="impact-section">
+
+        <h2 class="dashboard-title">
+            🌱 Environmental Impact
+        </h2>
+
+        <div class="impact-grid">
+
+            <div class="impact-card">
+
+                <div class="icon">🍱</div>
+
+                <h2 id="impactMeals">0</h2>
+
+                <p>Meals Saved</p>
+
+            </div>
+
+
+            <div class="impact-card">
+
+                <div class="icon">♻️</div>
+
+                <h2 id="impactWaste">0 kg</h2>
+
+                <p>Food Waste Reduced</p>
+
+            </div>
+
+
+            <div class="impact-card">
+
+                <div class="icon">🌍</div>
+
+                <h2 id="impactCO2">0 kg</h2>
+
+                <p>Estimated CO₂ Avoided</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- REWARD -->
+
+    <div class="reward-box">
+
+        <h2>🏆 FoodShare Rewards</h2>
+
+        <h1 id="rewardPoints">0</h1>
+
+        <p>Donation Points</p>
+
+        <div class="progress">
+
+            <div id="rewardProgress"
+                 class="progress-bar"></div>
+
+        </div>
+
+        <p id="rewardMessage">
+            Start donating to earn rewards!
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- DONATE -->
+
+<section id="donate" class="section">
+
+    <div class="form-container">
+
+        <h2>
+            🍱 Donate Surplus Food
+        </h2>
+
+        <form id="donationForm">
+
+            <div class="form-group">
+
+                <label>Donor Name</label>
+
+                <input
+                    type="text"
+                    id="donorName"
+                    placeholder="Enter donor name"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Food Name</label>
+
+                <input
+                    type="text"
+                    id="foodName"
+                    placeholder="Example: Vegetable Biryani"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Food Category</label>
+
+                <select id="category" required>
+
+                    <option value="">
+                        Select Category
+                    </option>
+
+                    <option>Cooked Food</option>
+                    <option>Fruits</option>
+                    <option>Vegetables</option>
+                    <option>Bakery</option>
+                    <option>Packaged Food</option>
+                    <option>Other</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Quantity / Number of Meals</label>
+
+                <input
+                    type="number"
+                    id="quantity"
+                    min="1"
+                    placeholder="Example: 20"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Expiry Date & Time</label>
+
+                <input
+                    type="datetime-local"
+                    id="expiry"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Pickup Location</label>
+
+                <input
+                    type="text"
+                    id="location"
+                    placeholder="Enter pickup location"
+                    required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Description</label>
+
+                <textarea
+                    id="description"
+                    placeholder="Enter additional details">
+                </textarea>
+
+            </div>
+
+
+            <button class="btn" type="submit">
+
+                Submit Donation
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+
+<!-- AVAILABLE FOOD -->
+
+<section id="available" class="section">
+
+    <h1 class="dashboard-title">
+        🍽️ Available Food
+    </h1>
+
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            id="searchFood"
+            placeholder="🔍 Search food..."
+            onkeyup="displayFood()">
+
+
+        <select id="filterCategory"
+                onchange="displayFood()">
+
+            <option value="All">
+                All Categories
+            </option>
+
+            <option>Cooked Food</option>
+            <option>Fruits</option>
+            <option>Vegetables</option>
+            <option>Bakery</option>
+            <option>Packaged Food</option>
+            <option>Other</option>
+
+        </select>
+
+    </div>
+
+
+    <div id="foodContainer"
+         class="food-container">
+    </div>
+
+</section>
+
+
+<!-- HISTORY -->
+
+<section id="history" class="section">
+
+    <h1 class="dashboard-title">
+        📋 Donation History
+    </h1>
+
+    <div style="overflow-x:auto">
+
+        <table class="history-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Food</th>
+                    <th>Donor</th>
+                    <th>Category</th>
+                    <th>Quantity</th>
+                    <th>Location</th>
+                    <th>Expiry</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="historyBody">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <p>
+        © 2026 FoodShare |
+        Reducing Food Waste |
+        Helping Communities 🌱
+    </p>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(sectionId){
+
+    const sections =
+        document.querySelectorAll(".section");
+
+    sections.forEach(section => {
+        section.classList.remove("active");
+    });
+
+    document
+        .getElementById(sectionId)
+        .classList.add("active");
+
+    updateDashboard();
+    displayFood();
+    displayHistory();
+
+    window.scrollTo(0,0);
+}
+
+
+/* =========================
+   GET DONATIONS
+========================= */
+
+function getDonations(){
+
+    return JSON.parse(
+        localStorage.getItem("donations")
+    ) || [];
+
+}
+
+
+/* =========================
+   SAVE DONATION
+========================= */
+
+document
+.getElementById("donationForm")
+.addEventListener("submit",function(event){
+
+    event.preventDefault();
+
+
+    const donation = {
+
+        id:Date.now(),
+
+        donor:
+            document.getElementById("donorName").value,
+
+        food:
+            document.getElementById("foodName").value,
+
+        category:
+            document.getElementById("category").value,
+
+        quantity:
+            Number(
+                document.getElementById("quantity").value
+            ),
+
+        expiry:
+            document.getElementById("expiry").value,
+
+        location:
+            document.getElementById("location").value,
+
+        description:
+            document.getElementById("description").value,
+
+        status:"Available"
+
+    };
+
+
+    const donations = getDonations();
+
+    donations.push(donation);
+
+
+    localStorage.setItem(
+        "donations",
+        JSON.stringify(donations)
+    );
+
+
+    alert(
+        "✅ Food donation added successfully!"
+    );
+
+
+    document
+        .getElementById("donationForm")
+        .reset();
+
+
+    showSection("available");
+
+});
+
+
+/* =========================
+   STATUS
+========================= */
+
+function getStatus(food){
+
+    const currentTime =
+        new Date();
+
+    const expiryTime =
+        new Date(food.expiry);
+
+
+    if(
+        expiryTime < currentTime &&
+        food.status !== "Claimed"
+    ){
+
+        return "Expired";
+
+    }
+
+
+    return food.status;
+
+}
+
+
+/* =========================
+   DISPLAY FOOD
+========================= */
+
+function displayFood(){
+
+    const container =
+        document.getElementById(
+            "foodContainer"
+        );
+
+
+    const donations =
+        getDonations();
+
+
+    const search =
+        document
+        .getElementById("searchFood")
+        ?.value
+        .toLowerCase() || "";
+
+
+    const category =
+        document
+        .getElementById("filterCategory")
+        ?.value || "All";
+
+
+    container.innerHTML = "";
+
+
+    const available =
+        donations.filter(food => {
+
+            const status =
+                getStatus(food);
+
+
+            const matchesSearch =
+                food.food
+                .toLowerCase()
+                .includes(search);
+
+
+            const matchesCategory =
+                category === "All" ||
+                food.category === category;
+
+
+            return(
+                status === "Available" &&
+                matchesSearch &&
+                matchesCategory
+            );
+
+        });
+
+
+    if(available.length === 0){
+
+        container.innerHTML = `
+
+            <div class="alert">
+
+                No matching food donations
+                are currently available.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    available.forEach(food => {
+
+        const expiry =
+            new Date(food.expiry);
+
+
+        const hoursLeft =
+            (
+                expiry - new Date()
+            ) /
+            (1000 * 60 * 60);
+
+
+        let warning = "";
+
+
+        if(hoursLeft <= 6){
+
+            warning = `
+                <p style="color:#dc3545;font-weight:bold">
+                🚨 Expires very soon!
+                </p>
+            `;
+
+        }
+
+        else if(hoursLeft <= 24){
+
+            warning = `
+                <p style="color:#d39e00;font-weight:bold">
+                ⚠️ Expires within 24 hours
+                </p>
+            `;
+
+        }
+
+
+        container.innerHTML += `
+
+            <div class="food-card">
+
+                <h3>
+                    ${food.food}
+                </h3>
+
+                <p>
+                    <strong>Category:</strong>
+                    ${food.category}
+                </p>
+
+                <p>
+                    <strong>Quantity:</strong>
+                    ${food.quantity} meals
+                </p>
+
+                <p>
+                    <strong>Donor:</strong>
+                    ${food.donor}
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    📍 ${food.location}
+                </p>
+
+                <p>
+                    <strong>Expires:</strong>
+                    ${expiry.toLocaleString()}
+                </p>
+
+                ${warning}
+
+                <p>
+                    ${food.description}
+                </p>
+
+                <p class="available">
+                    ● Available
+                </p>
+
+                <button
+                    class="card-btn"
+                    onclick="claimFood(${food.id})">
+
+                    🤝 Claim Food
+
+                </button>
+
+            </div>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   CLAIM FOOD
+========================= */
+
+function claimFood(id){
+
+    const donations =
+        getDonations();
+
+
+    const food =
+        donations.find(
+            item => item.id === id
+        );
+
+
+    if(!food) return;
+
+
+    food.status = "Claimed";
+
+
+    localStorage.setItem(
+        "donations",
+        JSON.stringify(donations)
+    );
+
+
+    alert(
+        "🤝 Food successfully claimed!"
+    );
+
+
+    displayFood();
+    updateDashboard();
+    displayHistory();
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
+function displayHistory(){
+
+    const body =
+        document.getElementById(
+            "historyBody"
+        );
+
+
+    const donations =
+        getDonations();
+
+
+    body.innerHTML = "";
+
+
+    if(donations.length === 0){
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td colspan="7">
+                    No donation history available.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    donations.forEach(food => {
+
+        const status =
+            getStatus(food);
+
+
+        let statusClass = "";
+
+
+        if(status === "Available")
+            statusClass = "available";
+
+        else if(status === "Claimed")
+            statusClass = "claimed";
+
+        else
+            statusClass = "expired";
+
+
+        body.innerHTML += `
+
+            <tr>
+
+                <td>
+                    ${food.food}
+                </td>
+
+                <td>
+                    ${food.donor}
+                </td>
+
+                <td>
+                    ${food.category}
+                </td>
+
+                <td>
+                    ${food.quantity}
+                </td>
+
+                <td>
+                    ${food.location}
+                </td>
+
+                <td>
+                    ${new Date(food.expiry)
+                        .toLocaleString()}
+                </td>
+
+                <td class="${statusClass}">
+                    ${status}
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function updateDashboard(){
+
+    const donations =
+        getDonations();
+
+
+    const total =
+        donations.length;
+
+
+    const available =
+        donations.filter(
+            food =>
+            getStatus(food) === "Available"
+        ).length;
+
+
+    const claimed =
+        donations.filter(
+            food =>
+            food.status === "Claimed"
+        ).length;
+
+
+    const quantity =
+        donations.reduce(
+            (sum,food) =>
+                sum + Number(food.quantity),
+            0
+        );
+
+
+    document.getElementById(
+        "totalDonations"
+    ).textContent = total;
+
+
+    document.getElementById(
+        "availableFood"
+    ).textContent = available;
+
+
+    document.getElementById(
+        "claimedFood"
+    ).textContent = claimed;
+
+
+    document.getElementById(
+        "totalQuantity"
+    ).textContent = quantity;
+
+
+    /* IMPACT */
+
+    document.getElementById(
+        "impactMeals"
+    ).textContent = claimed;
+
+
+    /*
+       Example project calculation:
+       1 meal ≈ 0.4 kg food
+    */
+
+    const wasteReduced =
+        (claimed * 0.4).toFixed(1);
+
+
+    /*
+       Example estimate:
+       1 kg food saved ≈ 2.5 kg CO2e avoided
+    */
+
+    const co2 =
+        (wasteReduced * 2.5).toFixed(1);
+
+
+    document.getElementById(
+        "impactWaste"
+    ).textContent =
+        wasteReduced + " kg";
+
+
+    document.getElementById(
+        "impactCO2"
+    ).textContent =
+        co2 + " kg";
+
+
+    /* REWARDS */
+
+    const points =
+        claimed * 10;
+
+
+    document.getElementById(
+        "rewardPoints"
+    ).textContent =
+        points;
+
+
+    const progress =
+        Math.min((points % 100),100);
+
+
+    document.getElementById(
+        "rewardProgress"
+    ).style.width =
+        progress + "%";
+
+
+    if(points === 0){
+
+        document.getElementById(
+            "rewardMessage"
+        ).textContent =
+            "Start donating to earn rewards!";
+
+    }
+
+    else if(points < 100){
+
+        document.getElementById(
+            "rewardMessage"
+        ).textContent =
+            "🌱 Keep going! Reach 100 points.";
+
+    }
+
+    else if(points < 500){
+
+        document.getElementById(
+            "rewardMessage"
+        ).textContent =
+            "🏆 Great job! You are helping reduce food waste.";
+
+    }
+
+    else{
+
+        document.getElementById(
+            "rewardMessage"
+        ).textContent =
+            "🌍 FoodShare Champion!";
+
+    }
+
+
+    checkExpiry();
+
+}
+
+
+/* =========================
+   EXPIRY ALERT
+========================= */
+
+function checkExpiry(){
+
+    const donations =
+        getDonations();
+
+
+    const now =
+        new Date();
+
+
+    const expiring =
+        donations.filter(food => {
+
+            if(food.status !== "Available")
+                return false;
+
+
+            const expiry =
+                new Date(food.expiry);
+
+
+            const difference =
+                expiry - now;
+
+
+            const hours =
+                difference /
+                (1000 * 60 * 60);
+
+
+            return(
+                hours > 0 &&
+                hours <= 24
+            );
+
+        });
+
+
+    const alertBox =
+        document.getElementById(
+            "expiryAlert"
+        );
+
+
+    if(expiring.length > 0){
+
+        alertBox.innerHTML = `
+
+            <div class="alert">
+
+                ⚠️ <strong>
+                Smart Expiry Alert:
+                </strong>
+
+                ${expiring.length}
+                food donation(s)
+                will expire within 24 hours.
+
+            </div>
+
+        `;
+
+    }
+
+    else{
+
+        alertBox.innerHTML = "";
+
+    }
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function toggleDarkMode(){
+
+    document.body.classList.toggle("dark");
+
+
+    const isDark =
+        document.body.classList.contains("dark");
+
+
+    localStorage.setItem(
+        "darkMode",
+        isDark
+    );
+
+}
+
+
+/* =========================
+   LOAD DARK MODE
+========================= */
+
+if(
+    localStorage.getItem("darkMode")
+    === "true"
+){
+
+    document.body.classList.add("dark");
+
+}
+
+
+/* =========================
+   INITIAL LOAD
+========================= */
+
+updateDashboard();
+displayFood();
+displayHistory();
+
+</script>
+
+</body>
+</html>
