@@ -1,0 +1,2108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FoodShare - Smart Food Waste Management</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f5f7f6;
+    color:#222;
+}
+
+header{
+    background:#198754;
+    color:white;
+    padding:15px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:bold;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    margin:0 6px;
+    cursor:pointer;
+}
+
+nav a:hover{
+    text-decoration:underline;
+}
+
+section{
+    display:none;
+    padding:35px 8%;
+}
+
+section.active{
+    display:block;
+}
+
+/* HOME */
+
+.hero{
+    min-height:520px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    background:linear-gradient(135deg,#d9f7e6,#ffffff);
+}
+
+.hero h1{
+    color:#198754;
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.hero p{
+    font-size:18px;
+    max-width:700px;
+    margin-bottom:25px;
+}
+
+button{
+    background:#198754;
+    color:white;
+    border:none;
+    padding:11px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    margin:5px;
+}
+
+button:hover{
+    background:#146c43;
+}
+
+.secondary{
+    background:#6c757d;
+}
+
+.danger{
+    background:#dc3545;
+}
+
+.warning{
+    background:#ffc107;
+    color:#222;
+}
+
+.info{
+    background:#0d6efd;
+}
+
+/* PROCESS */
+
+.process{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+    margin-top:30px;
+}
+
+.step{
+    background:white;
+    width:175px;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 2px 8px #ccc;
+}
+
+.step h3{
+    color:#198754;
+    margin-bottom:8px;
+}
+
+/* DASHBOARD */
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
+    gap:20px;
+    margin-top:25px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 2px 8px #ddd;
+}
+
+.card h2{
+    color:#198754;
+    margin-bottom:8px;
+}
+
+/* FORM */
+
+.form-box{
+    max-width:750px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 2px 10px #ddd;
+}
+
+.form-box h2{
+    color:#198754;
+    margin-bottom:20px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+textarea{
+    resize:vertical;
+}
+
+/* AVAILABLE FOOD */
+
+.search-box{
+    display:flex;
+    gap:10px;
+    margin:20px 0;
+}
+
+.search-box input,
+.search-box select{
+    flex:1;
+}
+
+.food-container{
+    display:grid;
+    grid-template-columns:
+    repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+}
+
+.food-card{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 3px 12px #ddd;
+}
+
+.food-card img{
+    width:100%;
+    height:210px;
+    object-fit:cover;
+}
+
+.food-content{
+    padding:20px;
+}
+
+.food-content h2{
+    color:#198754;
+    margin-bottom:10px;
+}
+
+.donor-name{
+    font-size:17px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.food-content p{
+    margin:7px 0;
+}
+
+.available-tag{
+    display:inline-block;
+    background:#d1e7dd;
+    color:#0f5132;
+    padding:5px 10px;
+    border-radius:15px;
+    font-size:13px;
+    margin:8px 0;
+}
+
+/* REQUEST */
+
+.selected-food{
+    background:#e9f7ef;
+    padding:15px;
+    border-radius:8px;
+    margin-bottom:20px;
+}
+
+.request-box{
+    max-width:700px;
+    margin:auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 2px 10px #ddd;
+}
+
+/* INFO */
+
+.info-box{
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    box-shadow:0 2px 8px #ddd;
+    margin-bottom:25px;
+}
+
+.info-box h2{
+    color:#198754;
+    margin-bottom:12px;
+}
+
+.info-box li{
+    margin:10px 0;
+}
+
+/* TABLE */
+
+.table-container{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    background:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:12px;
+    text-align:center;
+}
+
+th{
+    background:#198754;
+    color:white;
+}
+
+footer{
+    background:#198754;
+    color:white;
+    text-align:center;
+    padding:15px;
+    margin-top:30px;
+}
+
+@media(max-width:700px){
+
+    header{
+        flex-direction:column;
+        gap:12px;
+    }
+
+    nav{
+        text-align:center;
+    }
+
+    nav a{
+        display:inline-block;
+        margin:5px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+
+    .search-box{
+        flex-direction:column;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- HEADER -->
+
+<header>
+
+<div class="logo">
+🍲 FoodShare
+</div>
+
+<nav>
+
+<a onclick="showSection('home')">Home</a>
+
+<a onclick="showSection('dashboard')">
+Dashboard
+</a>
+
+<a onclick="showSection('donate')">
+Donate Food
+</a>
+
+<a onclick="showSection('available')">
+Available Food
+</a>
+
+<a onclick="showSection('needFood')">
+Need Food?
+</a>
+
+<a onclick="showSection('requests')">
+Requests
+</a>
+
+<a onclick="showSection('history')">
+History
+</a>
+
+</nav>
+
+</header>
+
+
+<!-- HOME -->
+
+<section id="home" class="active">
+
+<div class="hero">
+
+<h1>
+🍲 FoodShare
+</h1>
+
+<h2>
+Smart Food Waste Management
+</h2>
+
+<p>
+Anyone with safe surplus food can donate it.
+People and organizations who need food can
+find available food and request it.
+</p>
+
+<button onclick="showSection('donate')">
+🍱 Donate Food
+</button>
+
+<button onclick="showSection('available')">
+🍛 Find Food
+</button>
+
+<div class="process">
+
+<div class="step">
+<h3>1. Donate</h3>
+<p>
+Anyone can donate surplus food.
+</p>
+</div>
+
+<div class="step">
+<h3>2. List</h3>
+<p>
+Food appears in Available Food.
+</p>
+</div>
+
+<div class="step">
+<h3>3. Request</h3>
+<p>
+People can request required food.
+</p>
+</div>
+
+<div class="step">
+<h3>4. Approve</h3>
+<p>
+Request is reviewed and approved.
+</p>
+</div>
+
+<div class="step">
+<h3>5. Deliver</h3>
+<p>
+Food reaches the receiver.
+</p>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- DASHBOARD -->
+
+<section id="dashboard">
+
+<h1>
+📊 Dashboard
+</h1>
+
+<div class="dashboard-grid">
+
+<div class="card">
+<h2 id="totalFood">0</h2>
+<p>Total Food Donations</p>
+</div>
+
+<div class="card">
+<h2 id="availableMeals">0</h2>
+<p>Available Meals</p>
+</div>
+
+<div class="card">
+<h2 id="requestsCount">0</h2>
+<p>Food Requests</p>
+</div>
+
+<div class="card">
+<h2 id="deliveredMeals">0</h2>
+<p>Delivered Meals</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- DONATE FOOD -->
+
+<section id="donate">
+
+<div class="form-box">
+
+<h2>
+🍱 Donate Surplus Food
+</h2>
+
+<p style="margin-bottom:20px;">
+Anyone can donate surplus food using this form.
+</p>
+
+<form id="donateForm">
+
+
+<div class="form-group">
+
+<label>
+Who are you?
+</label>
+
+<select id="donorType" required>
+
+<option value="">
+Select Donor Type
+</option>
+
+<option>
+Individual
+</option>
+
+<option>
+Restaurant
+</option>
+
+<option>
+Hotel
+</option>
+
+<option>
+Hostel
+</option>
+
+<option>
+Function / Event
+</option>
+
+<option>
+NGO / Organization
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Donor / Restaurant / Organization Name
+</label>
+
+<input
+type="text"
+id="donorName"
+placeholder="Enter your name"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Contact Number
+</label>
+
+<input
+type="tel"
+id="donorPhone"
+placeholder="Enter phone number"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Food Name
+</label>
+
+<input
+type="text"
+id="foodName"
+placeholder="Example: Veg Meals"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Food Category
+</label>
+
+<select id="category" required>
+
+<option value="">
+Select Category
+</option>
+
+<option>
+Meals
+</option>
+
+<option>
+Rice
+</option>
+
+<option>
+Bakery
+</option>
+
+<option>
+Snacks
+</option>
+
+<option>
+Fruits
+</option>
+
+<option>
+Vegetables
+</option>
+
+<option>
+Other
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Number of Meals / Quantity
+</label>
+
+<input
+type="number"
+id="meals"
+min="1"
+placeholder="Example: 30"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Food Photo
+</label>
+
+<input
+type="file"
+id="foodImage"
+accept="image/*"
+>
+
+<small>
+Select a food photo from your computer.
+</small>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Food Prepared Date & Time
+</label>
+
+<input
+type="datetime-local"
+id="prepared"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Food Expiry / Last Consumption Time
+</label>
+
+<input
+type="datetime-local"
+id="expiry"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Food Collection Location
+</label>
+
+<input
+type="text"
+id="donorLocation"
+placeholder="Example: Vijayawada"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Pickup Time
+</label>
+
+<input
+type="text"
+id="pickup"
+placeholder="Example: 6 PM - 8 PM"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Food Description
+</label>
+
+<textarea
+id="description"
+rows="4"
+placeholder="Describe the food and packing details"
+required>
+</textarea>
+
+</div>
+
+
+<button type="submit">
+✅ Donate Food
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+<!-- AVAILABLE FOOD -->
+
+<section id="available">
+
+<h1>
+🍛 Available Food
+</h1>
+
+<p>
+Here you can see food donated by individuals,
+restaurants, hotels and organizations.
+</p>
+
+
+<div class="search-box">
+
+<input
+type="text"
+id="search"
+placeholder="Search food or donor..."
+onkeyup="displayFood()"
+>
+
+
+<select
+id="categoryFilter"
+onchange="displayFood()"
+>
+
+<option value="">
+All Categories
+</option>
+
+<option>
+Meals
+</option>
+
+<option>
+Rice
+</option>
+
+<option>
+Bakery
+</option>
+
+<option>
+Snacks
+</option>
+
+<option>
+Fruits
+</option>
+
+<option>
+Vegetables
+</option>
+
+</select>
+
+</div>
+
+
+<div
+id="foodContainer"
+class="food-container">
+</div>
+
+</section>
+
+
+<!-- NEED FOOD -->
+
+<section id="needFood">
+
+<h1>
+🤝 I Need Food
+</h1>
+
+<div class="info-box">
+
+<h2>
+Who can request food?
+</h2>
+
+<p>
+People or organizations who need food can
+select available food and submit a request.
+</p>
+
+<br>
+
+<ul>
+
+<li>
+Individuals who need food support
+</li>
+
+<li>
+NGOs
+</li>
+
+<li>
+Community organizations
+</li>
+
+<li>
+Authorized volunteers
+</li>
+
+<li>
+Community food distribution groups
+</li>
+
+</ul>
+
+</div>
+
+
+<div class="info-box">
+
+<h2>
+How to Request Food?
+</h2>
+
+<ol>
+
+<li>
+Click <b>Available Food</b>.
+</li>
+
+<li>
+Select the food you need.
+</li>
+
+<li>
+Click <b>Request This Food</b>.
+</li>
+
+<li>
+Enter your name and contact number.
+</li>
+
+<li>
+Enter required number of meals.
+</li>
+
+<li>
+Enter your location.
+</li>
+
+<li>
+Select Pickup or Delivery Request.
+</li>
+
+<li>
+Explain why the food is required.
+</li>
+
+<li>
+Click <b>Submit Food Request</b>.
+</li>
+
+</ol>
+
+<br>
+
+<button onclick="showSection('available')">
+🍛 Find Available Food
+</button>
+
+</div>
+
+</section>
+
+
+<!-- REQUEST FORM -->
+
+<section id="request">
+
+<div class="request-box">
+
+<h2>
+📝 Request Food
+</h2>
+
+<div
+id="selectedFood"
+class="selected-food">
+</div>
+
+
+<form id="requestForm">
+
+<input
+type="hidden"
+id="foodId"
+>
+
+
+<div class="form-group">
+
+<label>
+Receiver / Organization Name
+</label>
+
+<input
+type="text"
+id="receiverName"
+placeholder="Enter your name or organization"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Contact Number
+</label>
+
+<input
+type="tel"
+id="receiverPhone"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Number of Meals Required
+</label>
+
+<input
+type="number"
+id="requiredMeals"
+min="1"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Receiving Location
+</label>
+
+<input
+type="text"
+id="receiverLocation"
+placeholder="Enter receiving location"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Food Receiving Method
+</label>
+
+<select id="method" required>
+
+<option value="">
+Select Method
+</option>
+
+<option value="Pickup">
+I will collect the food
+</option>
+
+<option value="Delivery">
+Request Delivery
+</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Why do you need this food?
+</label>
+
+<textarea
+id="reason"
+rows="4"
+placeholder="Example: Community food distribution"
+required>
+</textarea>
+
+</div>
+
+
+<button type="submit">
+📩 Submit Food Request
+</button>
+
+<button
+type="button"
+class="secondary"
+onclick="showSection('available')"
+>
+Cancel
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+
+<!-- REQUESTS -->
+
+<section id="requests">
+
+<h1>
+📋 Food Requests
+</h1>
+
+<p>
+Restaurant / donor / admin can review
+food requests here.
+</p>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Food</th>
+<th>Donor</th>
+<th>Receiver</th>
+<th>Meals</th>
+<th>Location</th>
+<th>Method</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="requestTable">
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<!-- HISTORY -->
+
+<section id="history">
+
+<h1>
+📜 Food Distribution History
+</h1>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Food</th>
+<th>Donor</th>
+<th>Receiver</th>
+<th>Meals</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="historyTable">
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<footer>
+
+<p>
+© 2026 FoodShare | Share Food • Reduce Waste • Help Communities
+</p>
+
+</footer>
+
+
+<script>
+
+/* ----------------------------------
+   FOOD DATA
+---------------------------------- */
+
+let foodItems =
+JSON.parse(
+localStorage.getItem("foodItems")
+) || [];
+
+
+let requests =
+JSON.parse(
+localStorage.getItem("foodRequests")
+) || [];
+
+
+/* ----------------------------------
+   SHOW SECTION
+---------------------------------- */
+
+function showSection(id){
+
+document.querySelectorAll("section")
+.forEach(section=>{
+section.classList.remove("active");
+});
+
+document.getElementById(id)
+.classList.add("active");
+
+
+if(id==="available")
+displayFood();
+
+if(id==="dashboard")
+updateDashboard();
+
+if(id==="requests")
+displayRequests();
+
+if(id==="history")
+displayHistory();
+
+}
+
+
+/* ----------------------------------
+   DONATE FOOD
+---------------------------------- */
+
+document.getElementById("donateForm")
+.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+
+let imageFile =
+document.getElementById("foodImage")
+.files[0];
+
+
+function saveDonation(image){
+
+let donation = {
+
+id:Date.now(),
+
+donorType:
+document.getElementById("donorType")
+.value,
+
+donorName:
+document.getElementById("donorName")
+.value,
+
+donorPhone:
+document.getElementById("donorPhone")
+.value,
+
+foodName:
+document.getElementById("foodName")
+.value,
+
+category:
+document.getElementById("category")
+.value,
+
+meals:
+Number(
+document.getElementById("meals")
+.value
+),
+
+remainingMeals:
+Number(
+document.getElementById("meals")
+.value
+),
+
+image:image,
+
+prepared:
+document.getElementById("prepared")
+.value,
+
+expiry:
+document.getElementById("expiry")
+.value,
+
+location:
+document.getElementById("donorLocation")
+.value,
+
+pickup:
+document.getElementById("pickup")
+.value,
+
+description:
+document.getElementById("description")
+.value,
+
+status:"Available"
+
+};
+
+
+foodItems.push(donation);
+
+
+localStorage.setItem(
+"foodItems",
+JSON.stringify(foodItems)
+);
+
+
+alert(
+"Food donated successfully! " +
+"Your food is now visible in Available Food."
+);
+
+
+document.getElementById("donateForm")
+.reset();
+
+
+showSection("available");
+
+}
+
+
+/* IMAGE */
+
+if(imageFile){
+
+let reader =
+new FileReader();
+
+
+reader.onload=function(){
+
+saveDonation(
+reader.result
+);
+
+};
+
+
+reader.readAsDataURL(
+imageFile
+);
+
+}
+else{
+
+/* DEFAULT IMAGE */
+
+saveDonation(
+"https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80"
+);
+
+}
+
+});
+
+
+/* ----------------------------------
+   DISPLAY AVAILABLE FOOD
+---------------------------------- */
+
+function displayFood(){
+
+let container =
+document.getElementById("foodContainer");
+
+
+let search =
+document.getElementById("search")
+.value
+.toLowerCase();
+
+
+let category =
+document.getElementById("categoryFilter")
+.value;
+
+
+container.innerHTML="";
+
+
+let filtered =
+foodItems.filter(food=>{
+
+let searchMatch =
+food.foodName
+.toLowerCase()
+.includes(search)
+||
+food.donorName
+.toLowerCase()
+.includes(search);
+
+
+let categoryMatch =
+category==="" ||
+food.category===category;
+
+
+return
+food.status==="Available"
+&&
+food.remainingMeals>0
+&&
+searchMatch
+&&
+categoryMatch;
+
+});
+
+
+if(filtered.length===0){
+
+container.innerHTML=`
+
+<div class="card">
+
+<h2>
+No Food Available
+</h2>
+
+<p>
+No matching food is currently available.
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+filtered.forEach(food=>{
+
+container.innerHTML+=`
+
+<div class="food-card">
+
+<img
+src="${food.image}"
+alt="${food.foodName}"
+>
+
+<div class="food-content">
+
+<span class="available-tag">
+✓ Available
+</span>
+
+<h2>
+🍲 ${food.foodName}
+</h2>
+
+<p class="donor-name">
+
+${
+food.donorType==="Restaurant"
+?
+"🏪"
+:
+"👤"
+}
+
+${food.donorName}
+
+</p>
+
+<p>
+<b>Donor Type:</b>
+${food.donorType}
+</p>
+
+<p>
+📍 <b>Location:</b>
+${food.location}
+</p>
+
+<p>
+🍱 <b>Category:</b>
+${food.category}
+</p>
+
+<p>
+👥 <b>Available Meals:</b>
+${food.remainingMeals}
+</p>
+
+<p>
+🕐 <b>Prepared:</b>
+${formatDate(food.prepared)}
+</p>
+
+<p>
+⏰ <b>Expiry:</b>
+${formatDate(food.expiry)}
+</p>
+
+<p>
+🚚 <b>Pickup:</b>
+${food.pickup}
+</p>
+
+<p>
+${food.description}
+</p>
+
+<button
+onclick="requestFood(${food.id})"
+>
+📝 Request This Food
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+/* ----------------------------------
+   FORMAT DATE
+---------------------------------- */
+
+function formatDate(date){
+
+if(!date)
+return "Not specified";
+
+return new Date(date)
+.toLocaleString();
+
+}
+
+
+/* ----------------------------------
+   OPEN REQUEST
+---------------------------------- */
+
+function requestFood(id){
+
+let food =
+foodItems.find(
+item=>item.id===id
+);
+
+
+if(!food)
+return;
+
+
+document.getElementById("foodId")
+.value=food.id;
+
+
+document.getElementById("selectedFood")
+.innerHTML=`
+
+<h3>
+Selected Food
+</h3>
+
+<p>
+🍲 <b>${food.foodName}</b>
+</p>
+
+<p>
+👤 Donated by:
+${food.donorName}
+</p>
+
+<p>
+📍 Location:
+${food.location}
+</p>
+
+<p>
+👥 Available:
+${food.remainingMeals} meals
+</p>
+
+`;
+
+
+document.getElementById(
+"requiredMeals"
+).max=food.remainingMeals;
+
+
+showSection("request");
+
+}
+
+
+/* ----------------------------------
+   SUBMIT REQUEST
+---------------------------------- */
+
+document.getElementById("requestForm")
+.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+
+let foodId =
+Number(
+document.getElementById("foodId")
+.value
+);
+
+
+let food =
+foodItems.find(
+item=>item.id===foodId
+);
+
+
+if(!food){
+
+alert("Food not found.");
+
+return;
+
+}
+
+
+let meals =
+Number(
+document.getElementById("requiredMeals")
+.value
+);
+
+
+if(meals>food.remainingMeals){
+
+alert(
+"Only "+
+food.remainingMeals+
+" meals are available."
+);
+
+return;
+
+}
+
+
+let request={
+
+id:Date.now(),
+
+foodId:food.id,
+
+food:food.foodName,
+
+donor:food.donorName,
+
+receiver:
+document.getElementById("receiverName")
+.value,
+
+phone:
+document.getElementById("receiverPhone")
+.value,
+
+meals:meals,
+
+location:
+document.getElementById("receiverLocation")
+.value,
+
+method:
+document.getElementById("method")
+.value,
+
+reason:
+document.getElementById("reason")
+.value,
+
+status:"Pending"
+
+};
+
+
+requests.push(request);
+
+
+localStorage.setItem(
+"foodRequests",
+JSON.stringify(requests)
+);
+
+
+alert(
+"Food request submitted successfully!"
+);
+
+
+this.reset();
+
+
+showSection("requests");
+
+});
+
+
+/* ----------------------------------
+   DISPLAY REQUESTS
+---------------------------------- */
+
+function displayRequests(){
+
+let table =
+document.getElementById(
+"requestTable"
+);
+
+table.innerHTML="";
+
+
+if(requests.length===0){
+
+table.innerHTML=`
+
+<tr>
+<td colspan="8">
+No requests yet.
+</td>
+</tr>
+
+`;
+
+return;
+
+}
+
+
+requests.forEach(request=>{
+
+table.innerHTML+=`
+
+<tr>
+
+<td>
+${request.food}
+</td>
+
+<td>
+${request.donor}
+</td>
+
+<td>
+${request.receiver}
+</td>
+
+<td>
+${request.meals}
+</td>
+
+<td>
+${request.location}
+</td>
+
+<td>
+${request.method}
+</td>
+
+<td>
+<b>
+${request.status}
+</b>
+</td>
+
+<td>
+
+${
+request.status==="Pending"
+
+?
+
+`
+
+<button
+class="info"
+onclick="
+updateRequest(
+${request.id},
+'Approved'
+)
+"
+>
+Approve
+</button>
+
+<button
+class="danger"
+onclick="
+updateRequest(
+${request.id},
+'Rejected'
+)
+"
+>
+Reject
+</button>
+
+`
+
+:
+
+""
+
+}
+
+
+${
+request.status==="Approved"
+
+?
+
+`
+
+<button
+class="warning"
+onclick="
+updateRequest(
+${request.id},
+'Food Ready'
+)
+"
+>
+Food Ready
+</button>
+
+`
+
+:
+
+""
+
+}
+
+
+${
+request.status==="Food Ready"
+
+?
+
+`
+
+<button
+onclick="
+updateRequest(
+${request.id},
+'Delivered'
+)
+"
+>
+Delivered
+</button>
+
+`
+
+:
+
+""
+
+}
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+
+/* ----------------------------------
+   UPDATE REQUEST
+---------------------------------- */
+
+function updateRequest(
+id,
+newStatus
+){
+
+let request =
+requests.find(
+item=>item.id===id
+);
+
+
+if(!request)
+return;
+
+
+/* WHEN DELIVERED */
+
+if(newStatus==="Delivered"){
+
+let food =
+foodItems.find(
+item=>item.id===
+request.foodId
+);
+
+
+if(food){
+
+food.remainingMeals -=
+request.meals;
+
+
+if(food.remainingMeals<=0){
+
+food.remainingMeals=0;
+
+food.status="Claimed";
+
+}
+
+}
+
+}
+
+
+request.status=
+newStatus;
+
+
+localStorage.setItem(
+"foodItems",
+JSON.stringify(foodItems)
+);
+
+localStorage.setItem(
+"foodRequests",
+JSON.stringify(requests)
+);
+
+
+displayRequests();
+
+displayHistory();
+
+updateDashboard();
+
+displayFood();
+
+}
+
+
+/* ----------------------------------
+   HISTORY
+---------------------------------- */
+
+function displayHistory(){
+
+let table =
+document.getElementById(
+"historyTable"
+);
+
+table.innerHTML="";
+
+
+requests.forEach(request=>{
+
+table.innerHTML+=`
+
+<tr>
+
+<td>
+${request.food}
+</td>
+
+<td>
+${request.donor}
+</td>
+
+<td>
+${request.receiver}
+</td>
+
+<td>
+${request.meals}
+</td>
+
+<td>
+${request.status}
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+
+/* ----------------------------------
+   DASHBOARD
+---------------------------------- */
+
+function updateDashboard(){
+
+document.getElementById(
+"totalFood"
+).innerText=
+foodItems.length;
+
+
+let meals =
+foodItems.reduce(
+(sum,food)=>
+sum+
+Number(food.remainingMeals),
+0
+);
+
+
+document.getElementById(
+"availableMeals"
+).innerText=
+meals;
+
+
+document.getElementById(
+"requestsCount"
+).innerText=
+requests.length;
+
+
+let delivered =
+requests
+.filter(
+request=>
+request.status==="Delivered"
+)
+.reduce(
+(sum,request)=>
+sum+
+Number(request.meals),
+0
+);
+
+
+document.getElementById(
+"deliveredMeals"
+).innerText=
+delivered;
+
+}
+
+
+/* INITIAL LOAD */
+
+displayFood();
+
+displayRequests();
+
+displayHistory();
+
+updateDashboard();
+
+</script>
+
+</body>
+</html>
